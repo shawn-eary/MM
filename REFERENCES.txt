@@ -1,0 +1,104 @@
+-- SPECIFIC REFERENCES:
+-- The references in this section are for unique or novel concepts that
+-- I was specifically struggling with while working on the HMM project.
+-- This file should generally contain at least one inline citation for
+-- every reference I used while working on HMM
+-- 
+-- Authors credited for StackExchange posts are done in the following
+-- format:
+-- [MyFavoriteAnswererName; QuestionAskerName; et al...]
+-- Since the favorite answer for my use case and the queston asker
+-- seem they should get the most credit
+--
+-- [1] - Corzine, Chris
+-- Digital Audio - Creating a WAV (RIFF) File
+-- Topherlee.com
+-- http://www.topherlee.com/software/pcm-tut-wavformat.html
+-- Publication Date Unknown
+-- [Last Accessed: July 20, 2019]
+--
+-- [2] - Unknown (CCRMA Faculty - Stanford)
+-- WAVE PCM Soundfile Format
+-- EE 365 WAV File Format Notes
+-- Hosted on Tiny Systems at
+-- http://tiny.systems/software/soundProgrammer/WavFormatDocs.pdf
+-- Pulication Date Unknown
+-- [Last Accessed: July 20, 2019]
+--
+-- [3] - Stewart, Don; Weiss, Johannes; et al...
+-- How to Convert a Integer to a ByteString in Haskell
+-- StackOverflow
+-- https://stackoverflow.com/questions/2283119/
+-- how-to-convert-a-integer-to-a-bytestring-in-haskell
+-- February 20, 2019
+-- [Last Accessed: July 20, 2019]
+--
+-- [4] - ocharles; Joiner, Matt; et al...
+-- Convert a Lazy ByteString to a strict ByteString
+-- StackOverflow
+-- https://stackoverflow.com/questions/7815402/
+-- convert-a-lazy-bytestring-to-a-strict-bytestring
+-- November 29, 2012
+-- [Last Accessed: July 4, 2019]
+--
+-- [5] - bheklilr; Carey, Paul; et al...
+-- Converting Integer to Double in Haskell
+-- https://stackoverflow.com/questions/18280844/
+-- converting-integer-to-double-in-haskell
+-- August 16, 2013
+-- [Last Accessed: July 20, 2019]
+--
+-- [6] - kennytm; Timwi; et al...
+-- Convert String to Integer/Float in Haskell?
+-- https://stackoverflow.com/questions/2468410/
+-- convert-string-to-integer-float-in-haskell
+-- March 18, 2010
+-- [Last Accessed: July 20, 2019]
+--
+-- GENERAL REFERECES:
+-- The referneces in listed in this section were overarching and
+-- general.  They were used so frequently that it doesn't make sense to
+-- use an inline citation *every* single time they were referenced.  In
+-- the event something very unique or novel from those references is
+-- used that unique or novel though will be cited.  Otherwise, do not
+-- expect to see inline citations of these sources scattered all over
+-- the source code
+--
+-- [A] - Hudak, Paul; Peterson, John; Fasel, Joseph
+-- A Gentle Introduction to Haskell 98
+-- October, 1999
+-- https://www.haskell.org/tutorial/haskell-98-tutorial.pdf
+-- https://www.haskell.org/tutorial/index.html
+-- [Last Verified: June 30, 2019]
+--
+-- [B] - Baker, Martin
+-- Haskell Operators
+-- Euclidean Space
+-- https://www.euclideanspace.com/
+-- software/language/functional/haskell/operators/index.htm
+-- [Last Verified: July 4, 2019]
+--
+-- [C] - Various
+-- Hackage
+-- https://hackage.haskell.org/
+-- [Last Verified: July 3, 2019]
+--
+-- [D] - Various
+-- Hoogλe
+-- https://hoogle.haskell.org
+-- [Last Verified: July 17, 2019]
+--
+-- [E] - Various
+-- Haskell Wiki
+-- https://wiki.haskell.org/Haskell
+-- [Last Verified: July 20, 2019]
+--
+-- REFERNCE APPOLOGY:
+-- While I would like for this to be an academic work, it is not
+-- one.  This code is written in haste because I have a day job.
+-- If I've accidently missed someone that has signifiantly helped
+-- me without citing then or a "parent"/similar source, I appologize.
+-- I will try to correct the situation when I become aware.  Also,
+-- things that are common knowlege are not required to be cited, but
+-- with me being a paranoid person, I tend to cite whenever I get
+-- help
