@@ -11,10 +11,10 @@ A command line utility to take a "reasonable" frequency between 110-8000 Hz and 
 
 To use refWave do something like this at the command line:
 
-./refWave 440
-or
-./refWave 880
-
+./refWave 440<br />
+or<br />
+./refWave 880<br />
+<br />
 You will then get a file named out.wav that you can play on your device appropriately.  
 
 Compiline refWave is trivial since all of the packages used by refWav are already built in.  To compile refwave simply do this at the command prompt after you have properly installed GHC:
