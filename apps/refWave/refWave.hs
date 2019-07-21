@@ -110,7 +110,20 @@ generator freq t = do
 --   sine wave oscillating at the frequence sineFreq
 getPCM :: Int -> Double -> BStr.ByteString
 getPCM sineFreq curTime = do
-   let curVal = generator sineFreq curTime
+   let genFreq = sineFreq
+   
+   -- BEGIN Just for Giggles
+   -- Just for fun, I am attempting to apply frequency modulation to
+   -- the generator
+   let fmFreq = 200;   -- In hertz
+   let fmScale = 2.0;  -- Scale of 1.0 means +/- one octave from
+                       -- base frequence sineFreq
+   let fmCyclesCompleted = fromIntegral (fmFreq) * curTime
+   let fmRadiansCompleted = 2.0 * pi * fmCyclesCompleted
+   let intGenFreq = genFreq + truncate(fmScale * (sin fmRadiansCompleted))
+   -- END   Just for Giggles
+   
+   let curVal = generator intGenFreq curTime
    -- Not going there right now...
    -- let curValByteString = toLittleEndianByteString curVal
 
