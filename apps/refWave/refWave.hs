@@ -24,18 +24,26 @@ import qualified Data.Word as DW
 ----------------------------------------------------------------------
 outputFile = "out.wav"
 
--- 16 KHZ
-sampleRate = 16000;
--- TODO: This needs to be computed from sampleRate but it is hard coded
---       right now
-sampleRateW8 = [128, 62, 0, 0];
+numChannels = 1         -- Mono for now
+sampleRate = 16000      -- 16 KHZ for now
+bitsPerSample = 8       -- One Byte Per Sample right now
+-- Per [2],
+-- byteRate = sampleRate * numChannels * bitsPerSample / 8
+-- In addition to picking a resonable sample rate, you should
+-- probably also pick the product of sampleRate, numChannels
+-- and bitsPerSample so it is divisible by 8
+-- Also, in Haskell, Integer division is done via the quot
+-- function [7]
+byteRate = quot (sampleRate * numChannels * bitsPerSample) 8
+
+sampleRateByteStr = toLittleEndianByteString sampleRate
 
 -- Temporarily hard coded
-secondsToRun = 10;
+secondsToRun = 5;
 
 -- The time period or time between samples in the inverse of the
 -- frequency
-secondsPerCycle = 1.0 / sampleRate;
+secondsPerCycle = 1.0 / fromIntegral(sampleRate);
 
 
 
@@ -167,8 +175,7 @@ getWaveWrapper pcmData = do
   let fileSize = 36 + subChunkTwoSize
   let fileSizeByteS = toLittleEndianByteString fileSize
 
-  -- See [2] for an explanation of this, but it's hardcoded right now
-  let byteRateW8 = [128, 62, 0, 0]
+  let byteRateByteStr = toLittleEndianByteString byteRate
 
   let theByteString = BStr.pack [82, 73, 70, 70]  -- Text RIFF
   let tbs2 = BStr.append theByteString fileSizeByteS
@@ -181,8 +188,8 @@ getWaveWrapper pcmData = do
   let tbs6 = BStr.append tbs5 (BStr.pack [1, 0])
   -- Just one channel for now...
   let tbs7 = BStr.append tbs6 (BStr.pack [1, 0])
-  let tbs8 = BStr.append tbs7 (BStr.pack sampleRateW8)
-  let tbs9 = BStr.append tbs8 (BStr.pack byteRateW8)
+  let tbs8 = BStr.append tbs7 sampleRateByteStr
+  let tbs9 = BStr.append tbs8 byteRateByteStr
   let tbs10 = BStr.append tbs9 (BStr.pack blockAlign)
   -- 8 bits per sample hardcoded
   let tbs11 = BStr.append tbs10 (BStr.pack [8,0])
