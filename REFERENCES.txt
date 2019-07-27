@@ -109,7 +109,7 @@
 --
 -- [G] - Newhall, Tia
 -- Using Make and Writing MakeFiles
--- SwarthMore College
+-- Swarthmore College
 -- https://www.cs.swarthmore.edu/~newhall/unixhelp/howto_makefiles.html
 -- [Last Verified: July 27, 2019]
 --
