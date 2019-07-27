@@ -100,6 +100,25 @@
 -- https://wiki.haskell.org/Haskell
 -- [Last Verified: July 20, 2019]
 --
+-- [F] - Daume, Hal III; and *possibly* others but I'm not sure...
+-- Yet Another Haskell Tutorial
+-- WikiBooks
+-- http://users.umiacs.umd.edu/~hal/docs/daume02yaht.pdf
+-- https://en.wikibooks.org/wiki/Yet_Another_Haskell_Tutorial
+-- [Last Verified: July 27, 2019]
+--
+-- [G] - Newhall, Tia
+-- Using Make and Writing MakeFiles
+-- SwarthMore College
+-- https://www.cs.swarthmore.edu/~newhall/unixhelp/howto_makefiles.html
+-- [Last Verified: July 27, 2019]
+--
+-- [H] - Various
+-- WAV
+-- Wikipedia
+-- https://en.wikipedia.org/wiki/WAV
+-- [Last Verified: July 27, 2019]
+--
 -- REFERNCE APPOLOGY:
 -- While I would like for this to be an academic work, it is not
 -- one.  This code is written in haste because I have a day job.
