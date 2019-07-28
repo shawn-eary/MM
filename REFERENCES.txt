@@ -56,14 +56,14 @@
 -- [Last Accessed: July 20, 2019]
 --
 -- [7] - Pointy; demas
--- Divide Int to Inte and Return Int
+-- Divide Int to Int and Return Int
 -- https://stackoverflow.com/questions/4359043/
 -- divide-int-to-int-and-return-int
 -- December 5, 2010
 -- [Last Accessed: July 21, 2019]
 --
--- GENERAL REFERECES:
--- The referneces in listed in this section were overarching and
+-- GENERAL REFERENCES:
+-- The references in listed in this section were overarching and
 -- general.  They were used so frequently that it doesn't make sense to
 -- use an inline citation *every* single time they were referenced.  In
 -- the event something very unique or novel from those references is

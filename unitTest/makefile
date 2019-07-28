@@ -4,4 +4,4 @@
 #
 # RefWave is Licenced via the MIT License
 default: 
-	ghc refWave.hs ../../reuse/waveFile.hs ../../reuse/intConversion.hs ../../reuse.generators.hs
+	ghc gen_ut.hs utHelpers.hs ../reuse/generators.hs 

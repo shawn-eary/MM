@@ -19,6 +19,17 @@
 module Generators
   where
 
+
+
+-- The maximum amplitude to allow for sixteen bit generators
+-- this value should be close to the maixmum positive value of
+-- 2^16 but should maybe be just slighly smaller to prevent
+-- accidental "overruns"
+sixteenBitAmplitude :: Int
+sixteenBitAmplitude = 32760
+
+
+
 -- PURPOSE:
 --    Gets the sample value of a sine wave of frequency freq
 --    at time t
