@@ -19,7 +19,9 @@ import qualified Data.ByteString as BStr
 import Data.Binary
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.Word as DW
+import qualified Data.Int as DI
 import WaveFile
+import Generators
 
 ----------------------------------------------------------------------
 -- GLOBALS                                                          --
@@ -27,8 +29,14 @@ import WaveFile
 outputFile = "out.wav"
 
 numChannels = 1         -- Mono for now
-sampleRate = 16000      -- 16 KHZ for now
-bitsPerSample = 8       -- One Byte Per Sample right now
+sampleRate = 48000      -- Sampling Rate in Hertz
+                        -- 48000 is *LUDICROUS* overkill for a simple
+                        -- sine wave within the knowable notes on a piano
+                        -- keyboard but it is a common audio standard.  In
+                        -- reality 8000 HZ would probably do just find since
+                        -- a sine wave does not have artifacts, but 48000
+                        -- is still used hre since it is a common sampling
+                        -- rate for pro audio tools
 
 
 
@@ -42,62 +50,33 @@ secondsPerCycle = 1.0 / fromIntegral(sampleRate);
 
 
 -- PURPOSE:
---    Gets the sample value of a sine wave of frequency freq
---    at time t
---
--- freq:
---    The frequncy (in hertz) of the desired sine wave
---
--- t:
---    The time at which to collect the sample
---
--- RETURNS:
---   An integer represented the sample of a sine wave of frequency freq
---   (in hertz) at time t
-generator :: Int -> Double -> Int
-generator freq t = do
-  -- I wasn't expecting this to work but apparently to convert
-  -- from an Integer to Double can can just call fromIntegral
-  -- I though that only worked when going from one kind of Int
-  -- to another kind of Int...
-  let cyclesCompleted = fromIntegral (freq) * t
-  let radiansCompleted = 2.0 * pi * cyclesCompleted
-
-  -- To keep things simple, we are only using 8 bit samples right now
-  -- This means all values are between 0 255.
-  -- I presume this means:
-  -- 255 =~ 127
-  -- 127 =~ 0
-  -- 0 =~ -127
-  --
-  -- I will fix this to use 16 bit later but not right now...
-
-  -- Create values sine values between 0 and 254
-  -- Somehow I'm one off here [Should maybe be 255]
-  let curIntValue = 127 * (sin radiansCompleted) + 127
-  truncate curIntValue
-
-
-
--- PURPOSE:
 --    Return simple non compressed 16 Bit Mono PCM data representing a
 --    sine wave at the frequency sineFreq
 --
 -- sineFreq:
 --    The frequncy (in hertz) of the desired sine wave
 --
+-- curTime:
+--    The currentTime is "iterated" until the end and all samples have
+--    been collected.  curTime is fed to the generator
+--
+-- bitsPerSample:
+--    Right now, only 8 bit and 16 bit are supported
+--
 -- RETURNS:
---   A ByteString representing a sine 16 Bit Mono PCM "stream" of a
---   sine wave oscillating at the frequence sineFreq
-getPCM :: Int -> Double -> BStr.ByteString
-getPCM sineFreq curTime = do
-   let curVal = generator sineFreq curTime
-   -- Not going there right now...
-   -- let curValByteString = toLittleEndianByteString curVal
+--   A ByteString representing Mono PCM "stream" of a
+--   sine wave oscillating at the frequency sineFreq
+getPCM :: Int -> Double -> Int -> BStr.ByteString
+getPCM sineFreq curTime bitsPerSample = do
+   let curVal = generator sineFreq curTime bitsPerSample
 
    -- I found out in [3] that you use the encodefunction
    -- to convert an Integer to a ByteString
-   let curValByteString = encode (fromIntegral(curVal) :: DW.Word8)
+   let curValByteString =
+         if bitsPerSample == 8 then
+           encode (fromIntegral(curVal) :: DW.Word8)
+         else
+           encode (fromIntegral(curVal) :: DI.Int16)
    if curTime > secondsToRun then do
      -- We have meet the specified amount of time.
      -- Return one last value and quit
@@ -107,8 +86,18 @@ getPCM sineFreq curTime = do
    else do
      -- Get the current value and append it to the rest
      -- of the values
-     let restOfByteString = getPCM sineFreq (curTime + secondsPerCycle)
-     let newByteString = BStr.cons (fromIntegral curVal) restOfByteString
+     let restOfByteString =
+            getPCM sineFreq (curTime + secondsPerCycle) bitsPerSample
+     -- I found out in [3] that you use the encodefunction
+     -- to convert an Integer to a ByteString
+     let curValByteString =
+          if bitsPerSample == 8 then
+            encode (fromIntegral(curVal) :: DW.Word8)
+          else
+            encode (fromIntegral(curVal) :: DI.Int16)
+     let curValByteStringStrict = BL.toStrict curValByteString
+     let newByteString =
+          BStr.append curValByteStringStrict restOfByteString
      newByteString
 
 
@@ -117,18 +106,20 @@ main :: IO ()
 main = do
   theArgs <- getArgs
   let argsLength = length theArgs
-  if argsLength > 1 then do
-    putStrLn "Useage: refWave [freqBetween 110-8000 hertz]"
+  if argsLength > 2 then do
+    putStrLn
+       "Useage: refWave [freqBetween 110-8000 hertz] [bitsPerSample 8 or 16]"
     putStrLn ""
     putStrLn "Examples: "
     putStrLn "./refWave 440"
-    putStrLn "./refWave 880"
-    putStrLn "./refWave 7040"
+    putStrLn "./refWave 880 8"
+    putStrLn "./refWave 7040 16"
   else do
     if argsLength < 1 then do
        hWaveFile <- openFile outputFile WriteMode
        let sineFreq = 440
-       let pcmData = getPCM sineFreq 0.0
+       let bitsPerSample = 8
+       let pcmData = getPCM sineFreq 0.0 bitsPerSample
        let waveWrapperByteString =
              getWaveByteString
              pcmData
@@ -138,6 +129,12 @@ main = do
        BStr.hPutStr hWaveFile waveWrapperByteString
        hClose hWaveFile
     else do
+       let bitsPerSample =
+            if argsLength < 2 then
+               8
+            else do
+               -- [6] to read an integer from a string
+               read (theArgs !! 1)
        hWaveFile <- openFile outputFile WriteMode
        let sineFreqText = head theArgs
 
@@ -145,7 +142,13 @@ main = do
        -- text value of sineFreqText into an integer but
        -- see [6]
        let sineFreqInt = read sineFreqText
-       let pcmData = getPCM sineFreqInt 0.0
+
+       let debugStr =
+            "DEBUG: freq=" ++ (show sineFreqInt) ++
+            " bits=" ++ (show bitsPerSample)
+       putStrLn debugStr
+
+       let pcmData = getPCM sineFreqInt 0.0 bitsPerSample
        let waveWrapperByteString =
              getWaveByteString
              pcmData
