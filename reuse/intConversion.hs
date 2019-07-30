@@ -28,7 +28,6 @@ import qualified Data.ByteString.Lazy as BL
 
 
 
-
 -- PURPOSE:
 --    Take an unsigned integer and convert it to an Unsigned BtyeString
 --    in Little Endian format
@@ -57,3 +56,36 @@ toUnsignedLEndianByteS theInt = do
   let bigEndian32S = BL.toStrict bigEndian32L
   let littleEndian32 = BStr.reverse bigEndian32S
   littleEndian32
+
+
+
+-- PURPOSE:
+--    Take an unsigned Int16 and convert it to an Unsigned ByteString
+--    in Little Endian format
+--    (Same as toUnsignedLEndianByteS only the value is converted to
+--     16 Bit Format instead of 32 like the former)
+--
+-- Int:
+--    An unsigned integer
+--
+-- RETURNS:
+--   A ByteString in Little Endian 16 bit format representing the
+--   specifed unsigned integer named theInt
+toUnsignedLEndianByteS_Int16 :: Int -> BStr.ByteString
+toUnsignedLEndianByteS_Int16 theInt = do
+  -- Per [2] - "16-bit samples are stored as 2's-complement
+  -- signed integers, ranging from -32768 to 32767" and
+  -- "The default byte ordering assumed for WAVE"
+  -- data files is little-endian."
+  -- NOTE!!!! - I using 8 bit samples right now to get
+  --            around the two's compliment requirement...
+
+  -- I found out in [3] that you use the encodefunction
+  -- to convert an Integer to a ByteString in Big Endian
+  -- format
+  let bigEndian16L = encode (fromIntegral(theInt) :: Int16)
+
+  -- See [4] to convert Lazy ByteString to Strict ByteString
+  let bigEndian16S = BL.toStrict bigEndian16L
+  let littleEndian16 = BStr.reverse bigEndian16S
+  littleEndian16
