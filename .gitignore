@@ -1,0 +1,25 @@
+# Copyright (c) 2019 Shawn Eary
+#
+# Files patterns Git should not pay attention to 
+#
+# This file is Licensed via the MIT License
+
+# See https://git-scm.com/docs/gitignore of [G] for an explanation of
+# how .gitignore files exclude unwanted files
+
+# Exclude WAVE Files
+*.wav
+
+# Exclude Executables
+*.exe
+
+# Exclude Object Files
+*.o
+
+# Exclude Haskell Intermediate Files
+*.hi
+
+# Exclude EMACS Temporary Files Per [8]
+*~
+[#]*[#]
+.\#*

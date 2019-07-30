@@ -21,7 +21,7 @@ import qualified Data.ByteString.Lazy as BL
 import qualified Data.Word as DW
 import qualified Data.Int as DI
 import WaveFile
-import Generators
+import qualified Generators as Gens
 
 ----------------------------------------------------------------------
 -- GLOBALS                                                          --
@@ -68,7 +68,7 @@ secondsPerCycle = 1.0 / fromIntegral(sampleRate);
 --   sine wave oscillating at the frequency sineFreq
 getPCM :: Int -> Double -> Int -> BStr.ByteString
 getPCM sineFreq curTime bitsPerSample = do
-   let curVal = generator sineFreq curTime bitsPerSample
+   let curVal = Gens.sine sineFreq curTime bitsPerSample
 
    -- I found out in [3] that you use the encodefunction
    -- to convert an Integer to a ByteString

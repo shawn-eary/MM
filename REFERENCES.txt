@@ -7,8 +7,12 @@
 -- Authors credited for StackExchange posts are done in the following
 -- format:
 -- [MyFavoriteAnswererName; QuestionAskerName; et al...]
--- Since the favorite answer for my use case and the queston asker
--- seem they should get the most credit
+-- This is done since the favorite answer for my use case and the
+-- question asker seem they should get the most credit.  In some
+-- rare cases, the actual StackExchange question itself may be what I
+-- got the most use from.  In those cases, I may only attribute
+-- credit to the person that asked the question, since that is
+-- the person that actually helped me.
 --
 -- [1] - Corzine, Chris
 -- Digital Audio - Creating a WAV (RIFF) File
@@ -61,6 +65,13 @@
 -- divide-int-to-int-and-return-int
 -- December 5, 2010
 -- [Last Accessed: July 21, 2019]
+--
+-- [8] - shva; Cain, David; et al...
+-- Strange .gitignore behavior for emacs temporary files
+-- https://stackoverflow.com/questions/11498059/
+-- strange-gitignore-behavior-for-emacs-temporary-files
+-- July 16, 2012
+-- [Last Accessed: July 29, 2019]
 --
 -- GENERAL REFERENCES:
 -- The references in listed in this section were overarching and
@@ -118,6 +129,12 @@
 -- Wikipedia
 -- https://en.wikipedia.org/wiki/WAV
 -- [Last Verified: July 27, 2019]
+--
+-- [G] - Various
+-- Git Documentation
+-- git-scm.com
+-- https://git-scm.com/docs
+-- [Last Verified: July 29, 2019]
 --
 -- REFERNCE APPOLOGY:
 -- While I would like for this to be an academic work, it is not
