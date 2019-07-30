@@ -75,8 +75,11 @@ getWaveByteString pcmData numChannels sampleRate bitsPerSample = do
 
   -- See [2] for an examplation of this
   -- NumChannels * BitsPerSample / 8
-  -- For now, it is hardcoded
-  let blockAlign = [1, 0]
+  -- Integer division is done in Haskell via the quot
+  -- function [7]
+  let blockAlign = quot (numChannels * bitsPerSample) 8
+  let blockAlignByteStr =
+        IntC.toUnsignedLEndianByteS_Int16 blockAlign
 
   let subChunkTwoSize = BStr.length pcmData
   let subChunkTwoSizeByteS =
@@ -107,9 +110,11 @@ getWaveByteString pcmData numChannels sampleRate bitsPerSample = do
   let tbs7 = BStr.append tbs6 (BStr.pack [1, 0])
   let tbs8 = BStr.append tbs7 sampleRateByteStr
   let tbs9 = BStr.append tbs8 byteRateByteStr
-  let tbs10 = BStr.append tbs9 (BStr.pack blockAlign)
+  let tbs10 = BStr.append tbs9 blockAlignByteStr
   -- 8 bits per sample hardcoded
-  let tbs11 = BStr.append tbs10 (BStr.pack [8,0])
+  let bitsPerSampleByteStr =
+        IntC.toUnsignedLEndianByteS_Int16 bitsPerSample
+  let tbs11 = BStr.append tbs10 bitsPerSampleByteStr
   -- Text data
   let tbs12 = BStr.append tbs11 (BStr.pack [100, 97, 116, 97])
   let tbs13 = BStr.append tbs12 subChunkTwoSizeByteS
