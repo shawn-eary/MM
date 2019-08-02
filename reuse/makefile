@@ -4,5 +4,6 @@
 #
 # This makefile is licenced via the MIT Licence
 default:
-	ghc waveFile.hs
+	ghc audioFormat.hs
+	ghc generators.hs
 	ghc intConversion.hs

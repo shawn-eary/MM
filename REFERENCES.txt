@@ -136,6 +136,12 @@
 -- https://git-scm.com/docs
 -- [Last Verified: July 29, 2019]
 --
+-- [I] - Various
+-- Pulse-Code Modulation
+-- Wikipedia
+-- https://en.wikipedia.org/wiki/Pulse-code_modulation
+-- [Last Verified: August 1, 2019]
+--
 -- REFERNCE APPOLOGY:
 -- While I would like for this to be an academic work, it is not
 -- one.  This code is written in haste because I have a day job.

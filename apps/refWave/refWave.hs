@@ -16,12 +16,7 @@
 import System.Environment
 import System.IO
 import qualified Data.ByteString as BStr
-import Data.Binary
-import qualified Data.ByteString.Lazy as BL
-import qualified Data.Word as DW
-import qualified Data.Int as DI
-import WaveFile
-import qualified Generators as Gens
+import AudioFormat
 
 ----------------------------------------------------------------------
 -- GLOBALS                                                          --
@@ -40,65 +35,10 @@ sampleRate = 48000      -- Sampling Rate in Hertz
 
 
 
--- Temporarily hard coded
-secondsToRun = 5;
-
--- The time period or time between samples in the inverse of the
--- frequency
-secondsPerCycle = 1.0 / fromIntegral(sampleRate);
-
-
-
--- PURPOSE:
---    Return simple non compressed 16 Bit Mono PCM data representing a
---    sine wave at the frequency sineFreq
---
--- sineFreq:
---    The frequncy (in hertz) of the desired sine wave
---
--- curTime:
---    The currentTime is "iterated" until the end and all samples have
---    been collected.  curTime is fed to the generator
---
--- bitsPerSample:
---    Right now, only 8 bit and 16 bit are supported
---
--- RETURNS:
---   A ByteString representing Mono PCM "stream" of a
---   sine wave oscillating at the frequency sineFreq
-getPCM :: Int -> Double -> Int -> BStr.ByteString
-getPCM sineFreq curTime bitsPerSample = do
-   let curVal = Gens.sine sineFreq curTime bitsPerSample
-
-   -- I found out in [3] that you use the encodefunction
-   -- to convert an Integer to a ByteString
-   let curValByteString =
-         if bitsPerSample == 8 then
-           encode (fromIntegral(curVal) :: DW.Word8)
-         else
-           encode (fromIntegral(curVal) :: DI.Int16)
-   if curTime > secondsToRun then do
-     -- We have meet the specified amount of time.
-     -- Return one last value and quit
-     -- See [4] to convert Lazy ByteString to String ByteString
-     let sByteString = BL.toStrict curValByteString
-     sByteString
-   else do
-     -- Get the current value and append it to the rest
-     -- of the values
-     let restOfByteString =
-            getPCM sineFreq (curTime + secondsPerCycle) bitsPerSample
-     -- I found out in [3] that you use the encodefunction
-     -- to convert an Integer to a ByteString
-     let curValByteString =
-          if bitsPerSample == 8 then
-            encode (fromIntegral(curVal) :: DW.Word8)
-          else
-            encode (fromIntegral(curVal) :: DI.Int16)
-     let curValByteStringStrict = BL.toStrict curValByteString
-     let newByteString =
-          BStr.append curValByteStringStrict restOfByteString
-     newByteString
+-- Number of seconds to get PCM data for
+-- This is hardcoded at the moment instead of retreived from the
+-- command line
+secondsToRun = 5.0;
 
 
 
@@ -119,7 +59,8 @@ main = do
        hWaveFile <- openFile outputFile WriteMode
        let sineFreq = 440
        let bitsPerSample = 8
-       let pcmData = getPCM sineFreq 0.0 bitsPerSample
+       let pcmData =
+            getPCM sampleRate sineFreq 0.0 bitsPerSample secondsToRun
        let waveWrapperByteString =
              getWaveByteString
              pcmData
@@ -148,7 +89,8 @@ main = do
             " bits=" ++ (show bitsPerSample)
        putStrLn debugStr
 
-       let pcmData = getPCM sineFreqInt 0.0 bitsPerSample
+       let pcmData =
+            getPCM sampleRate sineFreqInt 0.0 bitsPerSample secondsToRun
        let waveWrapperByteString =
              getWaveByteString
              pcmData

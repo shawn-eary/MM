@@ -1,7 +1,10 @@
 -- Copyright (c) 2019 Shawn Eary
 --
--- WaveFile Module - Functions and definitions that are useful when
---                   dealing with the Microsoft/IBM Wave Standard [H]
+-- AudioFormat Module - Functions and definitions that are useful when
+--                      dealing with audio formats such as
+--                      the Microsoft/IBM Wave Standard [H] underlying
+--                      respesentations such as Pules-code Modulation
+--                      (PCM) [I]
 --
 -- This Module is Licenced via the MIT License
 --
@@ -17,11 +20,16 @@
 -- REFERENCES:
 -- [ Please Refer to REFERENCES.txt in root Folder]
 
-module WaveFile
+module AudioFormat
   where
 
 import qualified Data.ByteString as BStr
 import qualified IntConversion as IntC
+import qualified Generators as Gens
+import qualified Data.Word as DW
+import qualified Data.Int as DI
+import qualified Data.ByteString.Lazy as BL
+import Data.Binary
 
 
 
@@ -120,3 +128,68 @@ getWaveByteString pcmData numChannels sampleRate bitsPerSample = do
   let tbs13 = BStr.append tbs12 subChunkTwoSizeByteS
   let tbs14 = BStr.append tbs13 pcmData
   tbs14
+
+
+
+-- PURPOSE:
+--    Return simple non compressed 16 Bit Mono PCM data representing a
+--    sine wave at the frequency sineFreq
+--
+-- sampleRate:
+--    The frequency of the sample rate.  Common values might be
+--    8000, 16000, 24000 or 48000.  It needs to be twice the highest
+--    frequency of the input signal.  See limitations section of [I]
+--
+-- sineFreq:
+--    The frequncy (in hertz) of the desired sine wave
+--
+-- curTime:
+--    The currentTime is "iterated" until the end and all samples have
+--    been collected.  curTime is fed to the generator
+--
+-- bitsPerSample:
+--    Right now, only 8 bit and 16 bit are supported
+--
+-- secondsToRun:
+--    The number of seconds to get PCM Data for
+--
+-- RETURNS:
+--   A ByteString representing Mono PCM "stream" of a
+--   sine wave oscillating at the frequency sineFreq
+getPCM :: Int -> Int -> Double -> Int -> Double -> BStr.ByteString
+getPCM sampleRate sineFreq curTime bitsPerSample secondsToRun = do
+   -- The time period or time between samples in the inverse of the
+   -- frequency
+   let secondsPerCycle = 1.0 / fromIntegral(sampleRate);
+
+   let curVal = Gens.sine sineFreq curTime bitsPerSample
+
+   -- I found out in [3] that you use the encodefunction
+   -- to convert an Integer to a ByteString
+   let curValByteString =
+         if bitsPerSample == 8 then
+           encode (fromIntegral(curVal) :: DW.Word8)
+         else
+           encode (fromIntegral(curVal) :: DI.Int16)
+   if curTime > secondsToRun then do
+     -- We have meet the specified amount of time.
+     -- Return one last value and quit
+     -- See [4] to convert Lazy ByteString to String ByteString
+     let sByteString = BL.toStrict curValByteString
+     sByteString
+   else do
+     -- Get the current value and append it to the rest
+     -- of the values
+     let restOfByteString =
+            getPCM sampleRate sineFreq (curTime + secondsPerCycle) bitsPerSample secondsToRun
+     -- I found out in [3] that you use the encodefunction
+     -- to convert an Integer to a ByteString
+     let curValByteString =
+          if bitsPerSample == 8 then
+            encode (fromIntegral(curVal) :: DW.Word8)
+          else
+            encode (fromIntegral(curVal) :: DI.Int16)
+     let curValByteStringStrict = BL.toStrict curValByteString
+     let newByteString =
+          BStr.append curValByteStringStrict restOfByteString
+     newByteString
