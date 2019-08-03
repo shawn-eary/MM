@@ -158,26 +158,24 @@ getWaveByteString pcmData numChannels sampleRate bitsPerSample = do
 --   sine wave oscillating at the frequency sineFreq
 getPCM :: Int -> Int -> Double -> Int -> Double -> BStr.ByteString
 getPCM sampleRate sineFreq curTime bitsPerSample secondsToRun = do
-   -- The time period or time between samples in the inverse of the
-   -- frequency
-   let secondsPerCycle = 1.0 / fromIntegral(sampleRate);
-
-   let curVal = Gens.sine sineFreq curTime bitsPerSample
-
-   -- I found out in [3] that you use the encodefunction
-   -- to convert an Integer to a ByteString
-   let curValByteString =
-         if bitsPerSample == 8 then
-           encode (fromIntegral(curVal) :: DW.Word8)
-         else
-           encode (fromIntegral(curVal) :: DI.Int16)
-   if curTime > secondsToRun then do
-     -- We have meet the specified amount of time.
-     -- Return one last value and quit
-     -- See [4] to convert Lazy ByteString to String ByteString
-     let sByteString = BL.toStrict curValByteString
-     sByteString
+   if curTime >= secondsToRun then
+     -- We have meet the specified amount of time.  Quit.
+     BStr.empty
    else do
+     -- The time period or time between samples in the inverse of the
+     -- frequency
+     let secondsPerCycle = 1.0 / fromIntegral(sampleRate)
+
+     let curVal = Gens.sine sineFreq curTime bitsPerSample
+
+     -- I found out in [3] that you use the encodefunction
+     -- to convert an Integer to a ByteString
+     let curValByteString =
+          if bitsPerSample == 8 then
+            encode (fromIntegral(curVal) :: DW.Word8)
+          else
+            encode (fromIntegral(curVal) :: DI.Int16)
+
      -- Get the current value and append it to the rest
      -- of the values
      let restOfByteString =
