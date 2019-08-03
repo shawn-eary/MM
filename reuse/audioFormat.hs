@@ -185,8 +185,9 @@ getPCM sampleRate sineFreq curTime bitsPerSample secondsToRun = do
      let curValByteString =
           if bitsPerSample == 8 then
             encode (fromIntegral(curVal) :: DW.Word8)
-          else
-            encode (fromIntegral(curVal) :: DI.Int16)
+          else do
+            let twosCompliment = IntC.toTwosComplimentInt16 curVal
+            twosCompliment
      let curValByteStringStrict = BL.toStrict curValByteString
      let newByteString =
           BStr.append curValByteStringStrict restOfByteString

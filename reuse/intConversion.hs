@@ -25,6 +25,7 @@ import Data.Binary
 import Data.Int
 import qualified Data.ByteString as BStr
 import qualified Data.ByteString.Lazy as BL
+import qualified Data.Int as DI
 
 
 
@@ -89,3 +90,24 @@ toUnsignedLEndianByteS_Int16 theInt = do
   let bigEndian16S = BL.toStrict bigEndian16L
   let littleEndian16 = BStr.reverse bigEndian16S
   littleEndian16
+
+
+
+-- PURPOSE:
+--    Take a signed Int16 and convert it to two's compliment form
+--
+-- theInt:
+--    The integer to conver to two's complement form
+--
+-- RETURNS:
+--   A ByteString of length two representing the supplied integer
+--   in two's complement form
+toTwosComplimentInt16 :: Int -> BL.ByteString
+toTwosComplimentInt16 theInt = do
+  -- I found out in [3] that you use the encodefunction
+  -- to convert an Integer to a ByteString
+  let retValue = encode (fromIntegral(theInt) :: DI.Int16)
+  let tempRetValue = BL.reverse retValue
+  tempRetValue
+
+
