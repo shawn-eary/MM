@@ -16,6 +16,7 @@
 import System.Environment
 import System.IO
 import qualified Data.ByteString as BStr
+import qualified Generators as Gens
 import AudioFormat
 
 ----------------------------------------------------------------------
@@ -38,7 +39,7 @@ sampleRate = 48000      -- Sampling Rate in Hertz
 -- Number of seconds to get PCM data for
 -- This is hardcoded at the moment instead of retreived from the
 -- command line
-secondsToRun = 5.0;
+secondsToRun = 2.0;
 
 
 
@@ -46,56 +47,68 @@ main :: IO ()
 main = do
   theArgs <- getArgs
   let argsLength = length theArgs
-  if argsLength > 2 then do
+  if argsLength > 3 then do
     putStrLn
-       "Useage: refWave [freqBetween 110-8000 hertz] [bitsPerSample 8 or 16]"
+       "Useage: refWave [freqBetween 110-8000 hertz] [bitsPerSample 8 or 16] [sign|square]"
     putStrLn ""
     putStrLn "Examples: "
     putStrLn "./refWave 440"
     putStrLn "./refWave 880 8"
     putStrLn "./refWave 7040 16"
+    putStrLn "./refWave 7040 8 sine"
+    putStrLn "./refWave 7040 8 square"
   else do
-    if argsLength < 1 then do
-       hWaveFile <- openFile outputFile WriteMode
-       let sineFreq = 440
-       let bitsPerSample = 8
-       let pcmData =
-            getPCM sampleRate sineFreq 0.0 bitsPerSample secondsToRun
-       let waveWrapperByteString =
-             getWaveByteString
-             pcmData
-             numChannels
-             sampleRate
-             bitsPerSample
-       BStr.hPutStr hWaveFile waveWrapperByteString
-       hClose hWaveFile
-    else do
-       let bitsPerSample =
-            if argsLength < 2 then
-               8
-            else do
-               -- [6] to read an integer from a string
-               read (theArgs !! 1)
-       hWaveFile <- openFile outputFile WriteMode
-       let sineFreqText = head theArgs
+    let genFreqInt =
+         if argsLength < 1 then
+             440
+         else do
+             -- Weird that I have to use "read" to convert the
+             -- text value of sineFreqText into an integer but
+             -- see [6]
+             let genFreqText = head theArgs
+             read genFreqText
 
-       -- Weird that I have to use "read" to convert the
-       -- text value of sineFreqText into an integer but
-       -- see [6]
-       let sineFreqInt = read sineFreqText
+    let bitsPerSample =
+         if argsLength < 2 then
+             8
+         else do
+             -- [6] to read an integer from a string
+             read (theArgs !! 1)
 
-       let debugStr =
-            "DEBUG: freq=" ++ (show sineFreqInt) ++
-            " bits=" ++ (show bitsPerSample)
-       putStrLn debugStr
+    let genFunctionTxt =
+         if argsLength < 3 then
+             "sine"
+         else
+             (theArgs !! 2)
 
-       let pcmData =
-            getPCM sampleRate sineFreqInt 0.0 bitsPerSample secondsToRun
-       let waveWrapperByteString =
-             getWaveByteString
-             pcmData
-             numChannels
-             sampleRate
-             bitsPerSample
-       BStr.hPutStr hWaveFile waveWrapperByteString
-       hClose hWaveFile
+    let genFunction =
+         if genFunctionTxt == "sine" then
+             Gens.sine
+         else
+             Gens.square
+
+    hWaveFile <- openFile outputFile WriteMode
+
+    let debugStr =
+         "DEBUG: freq=" ++ (show genFreqInt) ++
+         " bits=" ++ (show bitsPerSample) ++
+         " genText=" ++ genFunctionTxt
+
+    putStrLn debugStr
+
+    let pcmData =
+         getPCM
+         genFunction
+         sampleRate
+         genFreqInt
+         0.0
+         bitsPerSample
+         secondsToRun
+    let waveWrapperByteString =
+         getWaveByteString
+         pcmData
+         numChannels
+         sampleRate
+         bitsPerSample
+    BStr.hPutStr hWaveFile waveWrapperByteString
+    hClose hWaveFile

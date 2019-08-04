@@ -25,7 +25,6 @@ module AudioFormat
 
 import qualified Data.ByteString as BStr
 import qualified IntConversion as IntC
-import qualified Generators as Gens
 import qualified Data.Word as DW
 import qualified Data.Int as DI
 import qualified Data.ByteString.Lazy as BL
@@ -132,16 +131,16 @@ getWaveByteString pcmData numChannels sampleRate bitsPerSample = do
 
 
 -- PURPOSE:
---    Return simple non compressed 16 Bit Mono PCM data representing a
---    sine wave at the frequency sineFreq
+--    Return simple non compressed 16 Bit Mono PCM data representing
+---   theGen at the frequnecy genFreq
 --
 -- sampleRate:
 --    The frequency of the sample rate.  Common values might be
 --    8000, 16000, 24000 or 48000.  It needs to be twice the highest
 --    frequency of the input signal.  See limitations section of [I]
 --
--- sineFreq:
---    The frequncy (in hertz) of the desired sine wave
+-- genFreq:
+--    The base frequncy (in hertz) to run the generator at
 --
 -- curTime:
 --    The currentTime is "iterated" until the end and all samples have
@@ -155,9 +154,10 @@ getWaveByteString pcmData numChannels sampleRate bitsPerSample = do
 --
 -- RETURNS:
 --   A ByteString representing Mono PCM "stream" of a
---   sine wave oscillating at the frequency sineFreq
-getPCM :: Int -> Int -> Double -> Int -> Double -> BStr.ByteString
-getPCM sampleRate sineFreq curTime bitsPerSample secondsToRun = do
+--   the supplied generator oscillating at the base
+--   freq genFreq
+getPCM :: (Int -> Double -> Int -> Int) -> Int -> Int -> Double -> Int -> Double -> BStr.ByteString
+getPCM theGen sampleRate genFreq curTime bitsPerSample secondsToRun = do
    if curTime >= secondsToRun then
      -- We have meet the specified amount of time.  Quit.
      BStr.empty
@@ -166,20 +166,17 @@ getPCM sampleRate sineFreq curTime bitsPerSample secondsToRun = do
      -- frequency
      let secondsPerCycle = 1.0 / fromIntegral(sampleRate)
 
-     let curVal = Gens.sine sineFreq curTime bitsPerSample
-
-     -- I found out in [3] that you use the encodefunction
-     -- to convert an Integer to a ByteString
-     let curValByteString =
-          if bitsPerSample == 8 then
-            encode (fromIntegral(curVal) :: DW.Word8)
-          else
-            encode (fromIntegral(curVal) :: DI.Int16)
-
      -- Get the current value and append it to the rest
      -- of the values
      let restOfByteString =
-            getPCM sampleRate sineFreq (curTime + secondsPerCycle) bitsPerSample secondsToRun
+          getPCM
+          theGen
+          sampleRate
+          genFreq
+          (curTime + secondsPerCycle) bitsPerSample secondsToRun
+
+     let curVal = theGen genFreq curTime bitsPerSample
+
      -- I found out in [3] that you use the encodefunction
      -- to convert an Integer to a ByteString
      let curValByteString =
