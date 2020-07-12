@@ -115,3 +115,26 @@ square freq t bitsPerSample = do
           sixteenBitAmplitude * sign
 
   curIntValue
+
+
+
+-- PURPOSE:
+--    Returns a null signal or just 0's for the specfied
+--    parameters
+--    (This is a hack to fill in space for a rest)
+--
+-- freq:
+--    The frequncy (in hertz) of the desired square wave
+--
+-- t:
+--    The time at which to collect the sample
+--
+-- bitsPerSample:
+--    The resolution of the sample.  At the moment, 8 and 16 are
+--    the only supported values.
+--
+-- RETURNS:
+--   Zero at frequency freq (in hertz) at time t
+nullGen :: Int -> Double -> Int -> Int
+nullGen freq t bitsPerSample = do
+   0

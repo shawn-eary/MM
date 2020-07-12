@@ -49,12 +49,33 @@ nE4 = 330
 nD4 = 294
 nC4 = 262  -- 261.6256
 nG3 = 196  -- 195.9977
+-- Hack for a REST
+nRe  = 0
 
 -- Tracker Style Notation
 bassLine=
-   [(nC4,1.0),(nG3,1.0)          ,(nC4,1.0)          ] ++
-   [(nD4,1.0),(nG3,1.0)          ,(nD4,1.0)          ] ++
-   [(nE4,1.0),(nF4,0.5),(nE4,0.5),(nD4,0.5),(nC4,0.5)]
+   [(nC4,1.0),          (nG3,1.0)          ,(nC4,1.0)          ] ++
+   [(nD4,1.0),          (nG3,1.0)          ,(nD4,1.0)          ] ++
+   [(nE4,1.0),          (nF4,0.5),(nE4,0.5),(nD4,0.5),(nC4,0.5)] ++
+   [(nD4,1.0),          (nG3,1.0)          ,(nD4,1.0)          ] ++
+
+   [(nC4,1.0),          (nG3,1.0)          ,(nC4,1.0)          ] ++
+   [(nD4,1.0),          (nG3,1.0)          ,(nD4,1.0)          ] ++
+   [(nD4,1.0),          (nG3,1.0)          ,(nD4,1.0)          ] ++
+   [(nC4,3.0)                                                  ]
+
+melody=
+   [(nE4,0.5),(nRe,0.5),(nE4,0.5),(nRe,0.5),(nE4,0.5),(nRe,0.5)] ++
+   [(nRe,3.0)                                                  ] ++
+   [(nRe,3.0)                                                  ] ++
+   [(nRe,3.0)                                                  ] ++
+
+   [(nRe,3.0)                                                  ] ++
+   [(nRe,3.0)                                                  ] ++
+   [(nRe,3.0)                                                  ] ++
+   [(nRe,3.0)                                                  ]
+
+
 
 getPCMLine :: [(Int, Double)] -> Double -> BStr.ByteString
 getPCMLine [] _ =
@@ -68,6 +89,13 @@ getPCMLine (l:ls) bpm = do
 
    let seconds = beats / bpm * 60.0;
    let freq = fst l
+
+   let genFunction =
+        if (freq == nRe) then
+           Gens.nullGen
+        else
+           Gens.sine
+
    let pcmData =
         getPCM
         genFunction
@@ -85,6 +113,8 @@ main = do
     hWaveFile <- openFile outputFile WriteMode
     let pcmData1 =
          getPCMLine bassLine beatsPerMinute
+    let pcmData2 =
+         getPCMLine melody beatsPerMinute
     let waveWrapperByteString =
          getWaveByteString
          pcmData1
