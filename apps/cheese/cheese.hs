@@ -45,6 +45,8 @@ beatsPerMinute=120.0
 
 
 -- See [9] for a where these frequencies in Hertz came from
+nA4 = 440
+nG4 = 392
 nF4 = 349
 nE4 = 330
 nD4 = 294
@@ -67,14 +69,14 @@ bassLine=
 
 melody=
    [(nE4,0.5),(nRe,0.5),(nE4,0.5),(nRe,0.5),(nE4,0.5),(nRe,0.5)] ++
-   [(nRe,3.0)                                                  ] ++
-   [(nRe,3.0)                                                  ] ++
-   [(nRe,3.0)                                                  ] ++
+   [(nE4,1.5)                    ,(nF4,0.5),(nG4,1.0)          ] ++
+   [(nG4,1.0)          ,(nA4,0.5),(nG4,0.5),(nF4,0.5),(nE4,0.5)] ++
+   [(nD4,1.5)                    ,(nE4,0.5),(nD4,1.0)          ] ++
 
-   [(nRe,3.0)                                                  ] ++
-   [(nRe,3.0)                                                  ] ++
-   [(nRe,3.0)                                                  ] ++
-   [(nRe,3.0)                                                  ]
+   [(nC4,0.5),(nRe,0.5),(nC4,0.5),(nRe,0.5),(nC4,0.5),(nRe,0.5)] ++
+   [(nC4,0.5),(nRe,0.5),(nD4,0.5),(nRe,0.5),(nE4,0.5),(nRe,0.5)] ++
+   [(nE4,0.5),(nRe,0.5),(nC4,0.5),(nRe,0.5),(nD4,0.5),(nRe,0.5)] ++
+   [(nE4,3.0)                                                  ]
 
 
 
@@ -135,7 +137,7 @@ main = do
     let pcmData2 =
          getPCMLine melody beatsPerMinute
 
-    -- https://stackoverflow.com/questions/4776750/what-is-an-idiomatic-way-to-add-lists-in-haskell
+    -- See [10] for example of zipWith
     let poorlyMixedResult =
           BStr.pack (BStr.zipWith avg pcmData1 pcmData2)
 
