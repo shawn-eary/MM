@@ -18,6 +18,7 @@
 -- 2) Install GNU Make
 -- 3) Change to this directory and run the command
 --    make
+import Data.Word
 import System.IO
 import qualified Data.ByteString as BStr
 import qualified Generators as Gens
@@ -77,6 +78,16 @@ melody=
 
 
 
+-- Broke: Not Implemneted
+-- This is probably going to go over like a lead ballon.  "mix"
+-- the signals by taking their "averge".  Sure man...
+-- mix :: [BStr.ByteString] -> BStr.ByteString
+-- mix theLines = do
+--    let numLines = length theLines
+--   (theLines !! 0)
+
+
+
 getPCMLine :: [(Int, Double)] -> Double -> BStr.ByteString
 getPCMLine [] _ =
    BStr.pack []
@@ -108,6 +119,14 @@ getPCMLine (l:ls) bpm = do
 
 
 
+avg :: Word8 -> Word8 -> Word8
+avg l r = do
+           let halfOfLeft = (div l 2)
+           let halfOfRight = (div r 2)
+           (halfOfLeft + halfOfRight)
+
+
+
 main :: IO ()
 main = do
     hWaveFile <- openFile outputFile WriteMode
@@ -115,9 +134,14 @@ main = do
          getPCMLine bassLine beatsPerMinute
     let pcmData2 =
          getPCMLine melody beatsPerMinute
+
+    -- https://stackoverflow.com/questions/4776750/what-is-an-idiomatic-way-to-add-lists-in-haskell
+    let poorlyMixedResult =
+          BStr.pack (BStr.zipWith avg pcmData1 pcmData2)
+
     let waveWrapperByteString =
          getWaveByteString
-         pcmData1
+         poorlyMixedResult
          numChannels
          sampleRate
          bitsPerSample
