@@ -5,7 +5,7 @@ This project is intented to be experiments with creating music via Haskell.  I d
 
 # Cheese
 
-This is a short Haskell program to generate a very small two part Baroque style music phrase.  The only instruments at this point are sine waves.  I used <a href="https://en.wikipedia.org/wiki/Music_tracker">Tracker</a>style notation to save the notes into two Haskell lists.  My refwave code that was written at an earlier date was used to generate the tones.  I reckon care has to be taken to ensure the Haskell lists for the two parts stay the same length and/or done get out of alignment.  Any chords that might arise are never more than two notes large.
+This is a short Haskell program to generate a very small two part Baroque style music phrase.  The only instruments at this point are sine waves.  I used <a href="https://en.wikipedia.org/wiki/Music_tracker">Tracker</a> style notation to save the notes into two Haskell lists.  My refwave code that was written at an earlier date was used to generate the tones.  I reckon care has to be taken to ensure the Haskell lists for the two parts stay the same length and/or done get out of alignment.  Any chords that might arise are never more than two notes large.
 
 If you are on UBuntu Studio 20.04 LTS, then you can do the following to hear it:
 <ol>
