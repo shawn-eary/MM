@@ -1,9 +1,25 @@
 # HMM
 Haskell Music Musings
 
-This project is intented to be experiments with creating music via Haskell.  Presently, I'm off to a slow start since I have a day job and I'm "lazy" (ha-ha!!!). No seriously, "Haskell" jokes about laziness aside, I like to do other things besides code in my free time such as "goofing off".
+This project is intented to be experiments with creating music via Haskell.  I don't spend much time on this but I goofed around with this a little this Sunday and finally make a two part music phrase consisting only of Sine Waves using the stuff from the refWave project that I coded previously.
 
-This first app refWave was kind of fun, but I struggled a lot with the Haskell typing system.  I guess one might be wondering why I might choose Haskell to try to create music when there are other choices out there.  Well, Haskell is what I consider to be a mathematical languages.  I feel it was designed with mathematicians in mind.  To that end, doing math calculations in Haskell seems intuitive.  So if I can get get through all of this boilerplate junk like creating wave files maybe some day I can focuse on the math of music.  That <b>might</b> be an interesting experience.
+# Cheese
+
+This is a short Haskell program to generate a very small two part Baroque style music phrase.  The only instruments at this point are sine waves.  I used <a href="https://en.wikipedia.org/wiki/Music_tracker">Tracker</a>style notation to save the notes into two Haskell lists.  My refwave code that was written at an earlier date was used to generate the tones.  I reckon care has to be taken to ensure the Haskell lists for the two parts stay the same length and/or done get out of alignment.  Any chords that might arise are never more than two notes large.
+
+If you are on UBuntu Studio 20.04 LTS, then you can do the following to hear it:
+<ol>
+  <li>cd ./HMM/apps/cheese</li>
+  <li>make</li>
+  <li>./cheese</li>
+  <li>aplay out.wav<li>
+</ol>
+
+CAUTION: As it's name implies, this music piece is very Cheezy.  It may pop your speakers slightly and/or give you gas.  If you have gastrointestinal issues (like I do), you may want to consult with your doctor before playing this piece too many times.
+
+OTHER: On a more serious note, I am still very upset about the naming convention of GNU\Linux background drivers.  In my oppinion Haskell is a beautiful language, but it tends to run better on GNU\Linux operatings systems than it does on MS Windows.  With that said, I wish someone would rename the GNU\Linux background drivers to something less offensive:
+https://www.utilars.com/Home/LinuxBeef
+As a Chrisitan, I do not want anything to do with spirits, witches, warlocks, daemons or demons.  I hope you all can undersand.  Also, Python is a rather unforutnate name for a fast growing language.  While Haskell is (in my opinion) way better than Python, many people in the Machine Learning industry have come to emrace it.  I don't claim to be any kind of angel, but please think before you pick "demonic" names for your software components.  Not all Software Engineers and/or IT professionals look at these conventions with agnostic eyes...
 
 # refWave
 
@@ -25,4 +41,4 @@ ghc ./refWave.hs
 
 # other
 
-I hope to some day add other projects, but I have a day job and I want to go goof off now.  This is fun, but I feel maybe Cubase calling...
+I hope to some day add other projects, but I have a day job and I want to go goof off now.  Will probably skip Cubase for today and go stright to video games...
