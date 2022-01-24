@@ -1,7 +1,7 @@
-# HMM
-Haskell Music Musings
+# MM
+Music Musings
 
-This project is intended to be experiments with creating music via Haskell.  I don't spend much time on this but I goofed around with this a little on July 12, 2020 and finally made a two part music phrase consisting only of Sine Waves using the stuff from the refWave project that I coded previously.
+Dumping ground for media experiments. Started off as Haskell Music Musings. May move on to other things at some point. I don't spend much time on this.
 
 # Cheese
 
