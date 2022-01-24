@@ -1,5 +1,5 @@
 # MM
-Music Musings
+Media Musings
 
 Dumping ground for media experiments. Started off as Haskell Music Musings. May move on to other things at some point. I don't spend much time on this.
 
