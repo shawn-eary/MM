@@ -37,8 +37,5 @@ Compiling refWave is trivial since all of the packages used by refWav are alread
 
 ghc ./refWave.hs
 
-
-
-# other
-
-I hope to some day add other projects, but I have a day job and I want to go goof off now.  Will probably skip Cubase for today and go stright to video games...  Play pray that Jennifer forgives me and comes back...
+# Other
+I just like dump junk in here...
