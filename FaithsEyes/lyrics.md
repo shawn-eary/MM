@@ -1,4 +1,4 @@
-# Faith's Eyes \
+# Faith's Eyes 
 ### Copyright 2022 - Shawn Eary - All Rights Reserved
 
 #### Verse1
