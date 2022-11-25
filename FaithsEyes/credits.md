@@ -7,3 +7,4 @@ https://www.guitar-chord.org \
 https://forums.steinberg.net/t/how-can-i-copy-and-paste-velocity/631176 \
 https://forums.steinberg.net/t/very-low-volume-after-audio-mixdown/600362/5 \
 https://www.youtube.com/watch?v=kMoFeOIzCM4
+https://www.rhymezone.com/
