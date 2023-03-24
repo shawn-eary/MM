@@ -9,8 +9,8 @@ https://fulbright.uark.edu/departments/music/faculty-and-staff/index/uid/winglau
 Holy Bible (NIV)  
 MuseScore 3.6.2  
 Debian 11 GNU\Linux  
-Windows 10
-Cubase 10.5
+Windows 10  
+Cubase 10.5  
 https://www.rhymezone.com/  
 https://www.thesaurus.com/  
 
